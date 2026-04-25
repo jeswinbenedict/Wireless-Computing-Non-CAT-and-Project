@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="V-YaGsdg2YHpOiLXEk43">
+    <mxGraphModel dx="1030" dy="534" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="700" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="attack-vectors-label" parent="1" style="text;html=1;align=center;strokeColor=#666666;fillColor=none;fontSize=12;dashed=1;" value="Attack Vectors" vertex="1">
+          <mxGeometry height="35" width="220" x="200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="api-cloud" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#FF4444;fontSize=10;fontStyle=1;" value="API / Cloud Exploitation" vertex="1">
+          <mxGeometry height="50" width="160" x="20" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="physical-tamper" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#FF4444;fontSize=10;fontStyle=1;" value="Physical Tampering" vertex="1">
+          <mxGeometry height="50" width="160" x="220" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mitm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#FF4444;fontSize=10;fontStyle=1;" value="MitM / Replay Attack" vertex="1">
+          <mxGeometry height="50" width="160" x="430" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="iot-arch-box" parent="1" style="text;html=1;align=left;verticalAlign=top;spacingLeft=8;overflow=hidden;fillColor=none;strokeColor=#666666;fontSize=11;" value="IoT System Architecture" vertex="1">
+          <mxGeometry height="380" width="420" x="100" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="perception" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4B5EAA;strokeColor=#3A4D99;fontColor=#ffffff;fontSize=10;align=center;" value="&lt;b&gt;PERCEPTION LAYER&lt;/b&gt;&lt;br&gt;Sensors | Actuators | RFID |&lt;br&gt;Embedded Microcontrollers" vertex="1">
+          <mxGeometry height="75" width="270" x="175" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="network" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#00ACC1;strokeColor=#00838F;fontColor=#000000;fontSize=10;align=center;" value="&lt;b&gt;NETWORK LAYER&lt;/b&gt;&lt;br&gt;MQTT | CoAP | 6LoWPAN |&lt;br&gt;Zigbee | LoRaWAN | LTE" vertex="1">
+          <mxGeometry height="75" width="270" x="175" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="application" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1E88E5;strokeColor=#1565C0;fontColor=#ffffff;fontSize=10;align=center;" value="&lt;b&gt;APPLICATION LAYER&lt;/b&gt;&lt;br&gt;Cloud Platforms | Edge&lt;br&gt;Analytics | Device&lt;br&gt;Management APIs" vertex="1">
+          <mxGeometry height="65" width="270" x="175" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="ml-engine-box" parent="1" style="text;html=1;align=center;verticalAlign=top;spacingTop=5;overflow=hidden;fillColor=none;strokeColor=#666666;fontSize=11;" value="Hybrid ML/DL Security Engine" vertex="1">
+          <mxGeometry height="310" width="440" x="90" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="cnn" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4CAF50;fontSize=10;fontStyle=1;strokeWidth=2;" value="CNN Feature Extractor" vertex="1">
+          <mxGeometry height="50" width="180" x="110" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="lstm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4CAF50;fontSize=10;fontStyle=1;strokeWidth=2;" value="LSTM Sequence Model" vertex="1">
+          <mxGeometry height="50" width="180" x="330" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="random-forest" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4CAF50;fontSize=10;fontStyle=1;strokeWidth=2;" value="Random Forest Classifier" vertex="1">
+          <mxGeometry height="50" width="210" x="205" y="775" as="geometry" />
+        </mxCell>
+        <mxCell id="alert-response" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontSize=10;fontStyle=1;strokeWidth=2;" value="Alert and Response" vertex="1">
+          <mxGeometry height="50" width="190" x="215" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-perc" edge="1" parent="1" source="api-cloud" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="perception" value="attacks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-phys-net" edge="1" parent="1" source="physical-tamper" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="network" value="attacks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-mitm-app" edge="1" parent="1" source="mitm" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="application" value="attacks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-perc-net" edge="1" parent="1" source="perception" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="network" value="Data Flow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-net-app" edge="1" parent="1" source="network" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="application" value="Data Flow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-app-cnn" edge="1" parent="1" source="application" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="cnn" value="Security Alerts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-app-rf" edge="1" parent="1" source="application" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="random-forest" value="Traffic Monitoring">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-app-lstm" edge="1" parent="1" source="application" style="endArrow=block;endFill=1;html=1;fontSize=9;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="lstm" value="Traffic Monitoring">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-cnn-rf" edge="1" parent="1" source="cnn" style="endArrow=block;endFill=1;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="random-forest" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-lstm-rf" edge="1" parent="1" source="lstm" style="endArrow=block;endFill=1;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="random-forest" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-rf-alert" edge="1" parent="1" source="random-forest" style="endArrow=block;endFill=1;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="alert-response" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
