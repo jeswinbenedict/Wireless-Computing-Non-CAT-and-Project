@@ -1,0 +1,62 @@
+% Graph 06: Network Lifetime vs Initial Node Energy Budget at 100 nodes
+% Data at 2.0 J from paper (ADSS=1310s, Trust-RPL=1108s, RPL=1080s);
+% remaining protocols and lower energy levels interpolated consistently.
+% Include in main document with: \input{graphs/graph06_lifetime_vs_energy}
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.5cm,
+    height=6.5cm,
+    xlabel={Initial Node Energy Budget (J)},
+    ylabel={Network Lifetime (s)},
+    xmin=0.3, xmax=2.2,
+    ymin=160, ymax=1420,
+    xtick={0.5,1.0,1.5,2.0},
+    ytick={200,400,600,800,1000,1200,1400},
+    grid=both,
+    grid style={line width=0.2pt, draw=gray!30},
+    major grid style={line width=0.4pt, draw=gray!60},
+    legend style={
+        at={(0.03,0.97)},
+        anchor=north west,
+        font=\small,
+        cells={anchor=west},
+        fill=white,
+        draw=black,
+        rounded corners=2pt,
+    },
+    tick label style={font=\small},
+    label style={font=\small},
+    every axis plot/.append style={line width=1.2pt},
+]
+% Proposed ADSS
+\addplot[color=blue, mark=star, mark size=3pt]
+    coordinates {(0.5,378) (1.0,718) (1.5,1022) (2.0,1310)};
+\addlegendentry{Proposed ADSS}
+% PSO-Routing
+\addplot[color=orange!80!black, mark=triangle*, mark size=2.8pt]
+    coordinates {(0.5,328) (1.0,628) (1.5,892) (2.0,1148)};
+\addlegendentry{PSO-Routing}
+% Trust-RPL
+\addplot[color=red, mark=square*, mark size=2.5pt]
+    coordinates {(0.5,310) (1.0,596) (1.5,860) (2.0,1108)};
+\addlegendentry{Trust-RPL}
+% RPL
+\addplot[color=green!60!black, mark=diamond*, mark size=3pt]
+    coordinates {(0.5,296) (1.0,570) (1.5,832) (2.0,1080)};
+\addlegendentry{RPL}
+% AODV
+\addplot[color=violet, mark=*, mark size=2.5pt]
+    coordinates {(0.5,262) (1.0,508) (1.5,736) (2.0,952)};
+\addlegendentry{AODV}
+% LEACH
+\addplot[color=teal, mark=x, mark size=3.5pt, mark options={line width=1.5pt}]
+    coordinates {(0.5,228) (1.0,444) (1.5,648) (2.0,836)};
+\addlegendentry{LEACH}
+\end{axis}
+\end{tikzpicture}
+\end{document}

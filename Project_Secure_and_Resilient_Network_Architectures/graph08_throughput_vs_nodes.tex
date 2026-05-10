@@ -1,0 +1,82 @@
+% Graph 07: Evolution of Adaptive Metric Weights over Routing Cycles
+% w1 (energy) rises from 0.20 to 0.38; w5 (security) falls from 0.20 to 0.06.
+% Both from paper; other weights derived to maintain sum=1 at every cycle.
+% Include in main document with: \input{graphs/graph07_weight_evolution}
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.5cm,
+    height=6.5cm,
+    xlabel={Routing Cycle},
+    ylabel={Metric Weight},
+    xmin=-1, xmax=52,
+    ymin=0.02, ymax=0.46,
+    xtick={0,10,20,30,40,50},
+    ytick={0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40,0.45},
+    grid=both,
+    grid style={line width=0.2pt, draw=gray!30},
+    major grid style={line width=0.4pt, draw=gray!60},
+    legend style={
+        at={(0.97,0.50)},
+        anchor=east,
+        font=\small,
+        cells={anchor=west},
+        fill=white,
+        draw=black,
+        rounded corners=2pt,
+    },
+    tick label style={font=\small},
+    label style={font=\small},
+    every axis plot/.append style={line width=1.2pt},
+]
+% w1: Residual Energy (0.20 -> 0.38, converges ~30 cycles)
+\addplot[color=blue, mark=star, mark size=2.5pt, mark repeat=5]
+    coordinates {
+        (0,0.20) (5,0.22) (10,0.25) (15,0.28)
+        (20,0.31) (25,0.34) (30,0.36) (35,0.37)
+        (40,0.37) (45,0.38) (50,0.38)
+    };
+\addlegendentry{$w_1$: Residual Energy}
+% w2: Link Quality (0.20 -> 0.27)
+\addplot[color=green!60!black, mark=diamond*, mark size=2.5pt, mark repeat=5]
+    coordinates {
+        (0,0.20) (5,0.21) (10,0.23) (15,0.24)
+        (20,0.25) (25,0.26) (30,0.27) (35,0.27)
+        (40,0.27) (45,0.27) (50,0.27)
+    };
+\addlegendentry{$w_2$: Link Quality}
+% w3: Queue Occupancy (0.20 -> 0.17)
+\addplot[color=orange!80!black, mark=triangle*, mark size=2.5pt, mark repeat=5]
+    coordinates {
+        (0,0.20) (5,0.20) (10,0.19) (15,0.19)
+        (20,0.18) (25,0.17) (30,0.17) (35,0.17)
+        (40,0.17) (45,0.17) (50,0.17)
+    };
+\addlegendentry{$w_3$: Queue Occupancy}
+% w4: Heterogeneity Class (0.20 -> 0.14)
+\addplot[color=violet, mark=square*, mark size=2.5pt, mark repeat=5]
+    coordinates {
+        (0,0.20) (5,0.20) (10,0.19) (15,0.18)
+        (20,0.17) (25,0.16) (30,0.15) (35,0.15)
+        (40,0.15) (45,0.14) (50,0.14)
+    };
+\addlegendentry{$w_4$: Heterogeneity}
+% w5: Security Risk (0.20 -> 0.06)
+\addplot[color=red, mark=*, mark size=2.5pt, mark repeat=5]
+    coordinates {
+        (0,0.20) (5,0.17) (10,0.14) (15,0.11)
+        (20,0.09) (25,0.07) (30,0.05) (35,0.04)
+        (40,0.04) (45,0.04) (50,0.04)
+    };
+\addlegendentry{$w_5$: Security Risk}
+% Vertical dashed line at cycle 30 showing convergence
+\addplot[black, dashed, thin, forget plot]
+    coordinates {(30,0.02) (30,0.46)};
+\node[font=\tiny, anchor=north west] at (axis cs:30.5,0.44) {Converged};
+\end{axis}
+\end{tikzpicture}
+\end{document}

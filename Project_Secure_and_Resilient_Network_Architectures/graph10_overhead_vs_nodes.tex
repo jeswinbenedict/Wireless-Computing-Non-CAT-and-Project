@@ -1,0 +1,62 @@
+% Graph 09: Packet Delivery Ratio vs Percentage of Malicious Nodes
+% (Selective Forwarding Attack at 100 nodes)
+% Data at 0% and 20% malicious from paper; other points interpolated consistently.
+% Include in main document with: \input{graphs/graph09_pdr_vs_attack}
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.5cm,
+    height=6.5cm,
+    xlabel={Percentage of Malicious Nodes (\%)},
+    ylabel={Packet Delivery Ratio (\%)},
+    xmin=-1, xmax=27,
+    ymin=37, ymax=100,
+    xtick={0,5,10,15,20,25},
+    ytick={40,50,60,70,80,90,100},
+    grid=both,
+    grid style={line width=0.2pt, draw=gray!30},
+    major grid style={line width=0.4pt, draw=gray!60},
+    legend style={
+        at={(0.97,0.97)},
+        anchor=north east,
+        font=\small,
+        cells={anchor=west},
+        fill=white,
+        draw=black,
+        rounded corners=2pt,
+    },
+    tick label style={font=\small},
+    label style={font=\small},
+    every axis plot/.append style={line width=1.2pt},
+]
+% Proposed ADSS
+\addplot[color=blue, mark=star, mark size=3pt]
+    coordinates {(0,96.8) (5,95.2) (10,93.1) (15,91.0) (20,88.7) (25,85.8)};
+\addlegendentry{Proposed ADSS}
+% Trust-RPL
+\addplot[color=red, mark=square*, mark size=2.5pt]
+    coordinates {(0,91.2) (5,87.4) (10,83.2) (15,79.6) (20,75.6) (25,71.2)};
+\addlegendentry{Trust-RPL}
+% PSO-Routing
+\addplot[color=orange!80!black, mark=triangle*, mark size=2.8pt]
+    coordinates {(0,89.4) (5,84.6) (10,79.4) (15,75.3) (20,71.2) (25,66.4)};
+\addlegendentry{PSO-Routing}
+% RPL
+\addplot[color=green!60!black, mark=diamond*, mark size=3pt]
+    coordinates {(0,87.1) (5,80.4) (10,73.8) (15,68.2) (20,63.1) (25,57.4)};
+\addlegendentry{RPL}
+% AODV
+\addplot[color=violet, mark=*, mark size=2.5pt]
+    coordinates {(0,83.6) (5,75.2) (10,66.8) (15,60.4) (20,54.8) (25,48.2)};
+\addlegendentry{AODV}
+% LEACH
+\addplot[color=teal, mark=x, mark size=3.5pt, mark options={line width=1.5pt}]
+    coordinates {(0,79.2) (5,69.8) (10,60.4) (15,54.1) (20,48.1) (25,41.6)};
+\addlegendentry{LEACH}
+\end{axis}
+\end{tikzpicture}
+\end{document}

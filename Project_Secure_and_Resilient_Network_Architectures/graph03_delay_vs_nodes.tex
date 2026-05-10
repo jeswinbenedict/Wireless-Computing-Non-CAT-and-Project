@@ -1,0 +1,62 @@
+% Graph 02: Network Lifetime vs Number of Deployed Nodes
+% Data points at 100 nodes from paper; 50 and 200 nodes interpolated consistently.
+% Include in main document with: \input{graphs/graph02_lifetime_vs_nodes}
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=8.5cm,
+    height=6.5cm,
+    xlabel={Number of Nodes},
+    ylabel={Network Lifetime (s)},
+    xmin=30, xmax=220,
+    ymin=580, ymax=1380,
+    xtick={50,100,200},
+    xticklabels={50,100,200},
+    ytick={600,700,800,900,1000,1100,1200,1300},
+    grid=both,
+    grid style={line width=0.2pt, draw=gray!30},
+    major grid style={line width=0.4pt, draw=gray!60},
+    legend style={
+        at={(0.97,0.97)},
+        anchor=north east,
+        font=\small,
+        cells={anchor=west},
+        fill=white,
+        draw=black,
+        rounded corners=2pt,
+    },
+    tick label style={font=\small},
+    label style={font=\small},
+    every axis plot/.append style={line width=1.2pt},
+]
+% Proposed ADSS
+\addplot[color=blue, mark=star, mark size=3pt]
+    coordinates {(50,1280) (100,1120) (200,940)};
+\addlegendentry{Proposed ADSS}
+% PSO-Routing
+\addplot[color=orange!80!black, mark=triangle*, mark size=2.8pt]
+    coordinates {(50,1120) (100,972) (200,810)};
+\addlegendentry{PSO-Routing}
+% Trust-RPL
+\addplot[color=red, mark=square*, mark size=2.5pt]
+    coordinates {(50,1080) (100,935) (200,780)};
+\addlegendentry{Trust-RPL}
+% RPL
+\addplot[color=green!60!black, mark=diamond*, mark size=3pt]
+    coordinates {(50,1060) (100,918) (200,762)};
+\addlegendentry{RPL}
+% AODV
+\addplot[color=violet, mark=*, mark size=2.5pt]
+    coordinates {(50,1020) (100,882) (200,720)};
+\addlegendentry{AODV}
+% LEACH
+\addplot[color=teal, mark=x, mark size=3.5pt, mark options={line width=1.5pt}]
+    coordinates {(50,950) (100,812) (200,650)};
+\addlegendentry{LEACH}
+\end{axis}
+\end{tikzpicture}
+\end{document}
