@@ -1,0 +1,1524 @@
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage[hypcap=false]{caption}
+
+\hypersetup{pageanchor=false}
+
+\tolerance=9999
+\hbadness=10000
+\hfuzz=150pt
+\vfuzz=10pt
+
+\numberwithin{equation}{section}
+
+\begin{document}
+\hfuzz=150pt
+\vfuzz=10pt
+\let\WriteBookmarks\relax
+
+\shorttitle{Adaptive Decision Support for Heterogeneous WSN-IoT Routing}
+\shortauthors{A J. K. Benedict et~al.}
+
+\title[mode=title]{Adaptive Decision Support System Based Heterogeneous
+Routing Protocol for WSN-Based IoT Network}
+
+\author[1]{A Jeswin Karunya Benedict}[orcid=0009-0004-2202-9012]
+\cormark[1]
+\ead{jeswin.23mic7225@vitapstudent.ac.in}
+
+\author[1]{S. Gopikrishnan}
+\ead{gopikrishnanme@gmail.com}
+
+
+
+\cortext[cor1]{Corresponding author}
+\address[1]{School of Computer Science and Engineering,
+VIT-AP University, Amaravati, Andhra Pradesh, India}
+
+
+
+\begin{abstract}
+WSN-IoT integration suffers from the continuous problem of
+routing as the environment poses issues such as heterogeneous devices,
+dynamic routing topologies, and extreme power limitations. Traditional
+routing techniques target single optimization criteria and hence are
+unable to handle situations involving multi-criteria such as
+power, reliability, latency, and security in the environment.
+In this paper, we present a new adaptive decision support
+framework for handling heterogeneous routing via multicriteria
+optimization based on residual energy, link quality, node
+heterogeneity factors, load conditions, and risks of attacks.
+The technique applies online weight adaptation and predictions to
+facilitate proactive route decisions without requiring central control.
+Experimental studies confirm better packet delivery ratio,
+network lifetime, and power conservation compared to AODV,
+RPL, and LEACH baselines.
+\end{abstract}
+
+\begin{keywords}
+Wireless Sensor Networks \sep
+Internet of Things \sep
+Heterogeneous Routing \sep
+Adaptive Decision Support \sep
+Multicriteria Optimization \sep
+Energy Efficiency \sep
+Network Lifetime \sep
+Quality of Service
+\end{keywords}
+
+\maketitle
+
+%%============================================================
+%% SECTION 1: INTRODUCTION
+%%============================================================
+\section{Introduction}
+\label{sec:intro}
+
+IoT has emerged as one of the largest connectivity frameworks in current computing systems, linking billions of different devices in areas such as smart cities, industry automation, precision agriculture, medical surveillance, and environmental sensors.\cite{HaddadPajouh2019SurveyIoTSecurity,R24_AlHanif2023BriefSurveyIoT}
+Wireless sensor networks have been implemented as the lowermost layer for collecting data in such extensive implementations; nevertheless, owing to their restricted processing power and memory space, they pose immense challenges concerning effective routing and continuous network maintenance.\cite{Laroui2021EdgeFogIoT}
+In IoT applications, where real-time response, reliability, and sustainability are essential, existing routing algorithms developed for homogeneous environments fail to meet the needs of current WSN-IoT applications.
+
+The existing routing techniques have emphasized achieving the
+optimization of a single objective while neglecting the intricate
+nature of heterogeneity in the system, where the nodes have different
+energy capacities, computational capabilities, and wireless communication
+capabilities.\cite{Tahsien2020MLIoTSecurity,R22_Tiwari2025ChallengesIoTDevices}
+Cluster based routing protocols such as LEACH and
+reactive routing protocols such as AODV perform excellently in lab
+conditions but utterly fail when applied in unpredictable situations
+where the topology keeps changing, nodes are mobile, and traffic load
+is variable. In the absence of intelligent decision making models that
+guarantee even energy usage and reliability in the network, there is a
+requirement for adaptive routing techniques.\cite{R23_Mudholkar2024ChallengesIoTSecurity}
+
+Emerging studies have established that the combination of machine learning with
+conventional routing parameters results in context-aware route selection that enhances
+network longevity and reliability in data transmission.\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,R3_Narkedimilli2025AdaptiveCurriculumIoT}
+Multi-objective decision model systems hold immense potential in addressing conflicting objectives,
+however, the computational overhead often exceeds that which can be supported by the computational resources present in the node sensors.
+Federated and decentralized learning approaches enable the tackling of scalability concerns, however, they bring further overheads as far as synchronization and convergence are concerned because of the transient connectivity in WSNs. \cite{R7_Baral2024AdaptiveEndToEndIoT} There has been an increasing need within the research community to design lightweight decision-making algorithms for smart routing in IoT networks.
+
+\subsection{Routing Challenges in WSN-IoT Environments}
+\label{subsec:challenges}
+
+Wires-Free Sensor Networks that are coupled to IoT
+architecture display attributes that do not match with the routing
+frameworks designed for regular and homogeneous network environments.
+\cite{R2_Alzaylaee2025SmartHomeVulnerabilities}
+The sensors working in such an environment are very much constrained
+in terms of energy sources, energy storage, and computing capabilities;
+however, at the same time, there is a need for handling various types
+of traffic in the network. Due to heterogeneous nature of networks
+caused by variations in hardware configurations, routing algorithms
+fail. \cite{R23_Mudholkar2024ChallengesIoTSecurity}
+
+Network Topology dynamics arising from node failures, external
+interferences, and controlled mobility make routing in WSN-IoT even more challenging.\cite{Laroui2021EdgeFogIoT,R21_Pessoa2024RITAResilientIoT}
+Whereas the disadvantages associated with reactive protocols include the problem of increased routing discovery cost, due to failure of links on many occasions, the major disadvantage associated with proactive protocols is scalability limitation beyond several hundred nodes. There is always the issue of selective forwarding, blackholes and sinkholes as potential attack forms, which utilize malicious criteria for routing, and thus cause delivery failures without triggering the failure detection process. The required protocol should be able to address all the problems mentioned above.
+
+\subsection{Decision Support Systems for Adaptive Routing}
+\label{subsec:dss}
+
+DSS allows the use of models that employ mathematics and algorithms to aid in the comparison of different routing paths based on several parameters that work simultaneously.
+AHP and TOPSIS are just some of the methods available in assigning weights and ranking alternatives based on diverse routing metrics.
+If applied in a distributed manner using sensor nodes, these kinds of models allow each sensor node to make their own decision on how to route without requiring any centralized control over the entire network layout.
+
+The predictive algorithms serve as complements to the MCDM approach because they provide prediction about the state of the network in the future, thus enabling proactively adjusting routing to avoid poor performance.
+Machine learning classifiers and regressors, which are simple enough and work on behavioral data related to the behavior of networks, are able to predict future cases of poor quality of links, congestion areas, and power depletion of nodes. Explainable artificial intelligence approaches are employed when making decisions on routing in order to meet auditing standards.
+
+%%============================================================
+%% SECTION 2: RESEARCH OBJECTIVES
+%%============================================================
+\section{Research Objectives}
+\label{sec:objectives}
+
+Firstly, it is needed to develop an integrated routing metric framework that would integrate into a single decision-making process the elements of residual energy, link quality metrics, node heterogeneity metrics, and risks of traffic congestions and security problems, thus enabling a flexible, intelligent choice of optimal routes in the dynamically changing network environment where many different requirements have to be fulfilled simultaneously.
+Secondly, we need to design a light-weight method for conducting multicriteria decision analysis by using analytical hierarchic process or technique for order preference by similarity to ideal solution approach. This approach should not entail too much computing and memory load on the WSN devices that implement it.\cite{Madhavan2025DesigningSecureIoT,R22_Tiwari2025ChallengesIoTDevices}
+
+The third objective is the application of machine learning prediction models to predict the degradation of the link, congestion, and the failure of nodes in order to conduct adaptive routing to prevent the violation of the QoS threshold values in IoT applications.
+This will guarantee uninterrupted functioning and reduce the frequency of reactive route repairs, which would otherwise incur high control overheads.\cite{R9_Tumula2025OptimizingIoTSDNBlockchain, R21_Pessoa2024RITAResilientIoT}
+
+Fourthly, the objective here is to implement and validate the adaptive
+model through detailed simulations using realistic topology for the WSN-IoT
+and to compare it with already existing routing techniques such as AODV,
+RPL, LEACH, and newly bio-inspired routing algorithms to evaluate the
+benefits in terms of delivery ratio, delay, energy efficiency, and network
+lifetime in different deployment scenarios, including dense sensor networks
+in urban environment and sparse sensor networks in industrial environments.
+
+%%============================================================
+%% SECTION 3: LITERATURE SURVEY
+%%============================================================
+\section{Literature Survey}
+\label{sec:litsurvey}
+
+Several approaches in the WSNIoT-routing area have been produced by the existing literature,
+such as cluster routing, bio-inspired optimization, reinforcement learning methods, and trust-based
+security approaches. According to past surveys, the fields that have received attention in the
+algorithms are energy savings, extended lifetimes of networks, and quality of service
+provisioning, while concerns regarding the incorporation of security and heterogeneity are rising.
+While much progress has been made in every field independently, significant gaps in adaptive
+decision making in general exist particularly where heterogeneity and an uncertain security
+environment are involved, as shall be elaborated later.\cite{R22_Tiwari2025ChallengesIoTDevices}
+
+\subsection{Energy-Efficient and Hierarchical Routing Protocols}
+\label{subsec:lit_energy}
+
+Clustered and hierarchical routing algorithms are common in the
+research studies related to WSN-IoT owing to their efficiencies in
+extending the lifetime of networks through balancing loads and multi-hop
+aggregation of data. The LEACH algorithm has been modified to use fuzzy
+logic to choose cluster heads. Such an algorithm leads to a reduction
+in energy consumption ranging from 25\% up to 35\%. This becomes more
+efficient in cases where there are heterogeneous nodes and energy residues
+to consider during the process of cluster formation. Game Theory principles
+have been used to formulate the process of clustering as a game of achieving
+equilibrium.
+
+These clusters will have taken into account not only depth
+but also reliability, and will be made in order to satisfy some requirements
+in underwater sensor networks and industrial IoT, which require
+taking into account both qualities of connections and depths of routing.\cite{R21_Pessoa2024RITAResilientIoT,R9_Tumula2025OptimizingIoTSDNBlockchain}
+Energy depletion in cluster heads is detected via Markov chain models,
+and proactive mechanisms for cluster head replacement are
+used to increase the longevity of the system without frequent reconfigurations
+on the network. Clustering through reinforcement learning takes into account
+changes in energy consumption patterns dynamically, leading to a 40 percent
+increase in the lifetime of nodes.
+
+The cost associated with cluster maintenance increases rapidly with an increase in network density,
+thus making it inefficient for large deployments covering broad geographic spaces.\cite{Harbi2023BlockchainIoDSecurity}
+Fixed cluster structures give rise to energy depletion at relay points, resulting in premature failure of the entire network structure.
+The utilization of cluster heads at central points involves broadcasting of topological information among all nodes, which causes resource-intensive and non-scalable systems limited to medium size networks.
+These drawbacks call for the employment of a decentralized and adaptive decision-making process as highlighted in this paper.
+\subsection{Machine Learning and Bio-Inspired Routing Approaches}
+\label{subsec:lit_ml}
+
+Several biomimetic approaches including PSO, ACO, and GA are utilized in WSN-IoT routing due to their ability to explore complicated solution spaces where there is no gradient available. Particle Swarm based approach converges faster compared to Genetic algorithm approach when connectivity is low at times. The concept of pheromones in Ant Colony based technique is viewed as an energy-based fitness function, and routing decisions made by individual nodes reduce energy expenditure.
+
+The DRL paradigms formulate the WSN-IoT routing problem as
+MDPs where optimal forwarding strategies are learned through interactions
+with the environment without modeling of the underlying network.\cite{R3_Narkedimilli2025AdaptiveCurriculumIoT,R7_Baral2024AdaptiveEndToEndIoT}
+The Q-learning methods achieve energy savings ranging from 18 to
+22 percent relative to reactive strategies for stable network setups, but DQN is employed for large-state spaces that encompass energy, topology,
+and traffic information concurrently. The federated learning approach resolves
+issues with data privacy because model training can be conducted in a decentralized manner without revealing sensor data.
+
+The inherent iterativeness of bio-inspired approaches leads to a
+convergence latency effect that is not compatible with the real-time
+demands of IoT systems that need immediate route responses.
+\cite{R2_Alzaylaee2025SmartHomeVulnerabilities} The exploration versus
+exploitation trade-offs involved in the learning of policies lead to
+temporary performance decline issues that could compromise quality of
+service agreements in real-time monitoring of critical infrastructures.
+Training datasets and the curse of dimensionality pose actual
+obstacles to the implementation of machine-learning based routing
+schemes in resource-constrained sensor devices.
+
+\subsection{Trust-Aware and Security-Integrated Routing}
+\label{subsec:lit_trust}
+
+Routing schemes incorporating trust features have emerged as highly
+prominent options for hostile IoT infrastructures prone to selective
+forwarding, blackhole, and sinkhole attacks exploiting manipulation
+of metrics in order to lure and drop legitimate packets.
+\cite{Harbi2023BlockchainIoDSecurity,R10_Dinde2024BlockchainIoTIntegration} Trust assessment based on fuzzy logic takes into account
+both direct, indirect evidence, as well as behavior history in
+estimating the degree of trustworthiness of nodes, thus enhancing
+packet delivery efficiency by 30 to 35 percent in the presence of
+malicious participants.
+
+The trust management models in context-aware trust management
+techniques leverage temporal, spatial, and behavioral evidence streams
+to make dynamic trust assessments, which are able to adjust according
+to any changes in threat landscapes.\cite{Sabrina2022BlockchainSecureIoT,R18_Alzoubi2024BlockchainIoT}
+The machine learning models that classify network behavioral patterns
+are able to differentiate between genuine fluctuations in routes and
+malicious manipulation with an accuracy rate higher than 94 percent,
+resulting in fewer false positives that could affect the functioning
+of the nodes in the system.
+
+Real-time behavior tracking and model management activities utilize
+considerable energy, restricting their practical implementation in
+resource-limited devices with long-term power needs.
+\cite{R19_Falch2025TechnoEconomicsIoTOT} The consensus process
+involved in blockchain technology causes communications overhead,
+which does not align with the low-energy, duty-cycling
+properties needed for power harvesting sensors. The reliance on
+globally synchronized reputation databases poses difficulties in
+partially connected or intermittently connected wireless sensor
+network/internet of things architectures.
+
+\begin{table*}[htbp]
+\centering
+\caption{Comparative Survey of Recent WSN-IoT Routing Protocols}
+\label{tab:litsurvey}
+\begin{tabular}{p{2.4cm} p{3.2cm} p{2.8cm} p{2.8cm} p{2.6cm}}
+\toprule
+\textbf{Reference} & \textbf{Method Proposed} &
+\textbf{Techniques Used} & \textbf{Issues Resolved} &
+\textbf{Limitation} \\
+\midrule
+Tumula et al.~\cite{R9_Tumula2025OptimizingIoTSDNBlockchain}
+  & Blockchain-SDN integrated routing
+  & Blockchain consensus and SDN control plane
+  & Security enforcement and QoS management
+  & High overhead from blockchain consensus \\
+Pessoa et al.~\cite{R21_Pessoa2024RITAResilientIoT}
+  & RITA resilience framework
+  & Fault tolerance and recovery mechanisms
+  & Application resilience under node failures
+  & Limited heterogeneous node support \\
+Narkedimilli et al.~\cite{R3_Narkedimilli2025AdaptiveCurriculumIoT}
+  & Curriculum learning based IDS
+  & Adaptive curriculum learning and XAI
+  & Intrusion detection accuracy in IoT
+  & No energy or routing optimization \\
+Baral et al.~\cite{R7_Baral2024AdaptiveEndToEndIoT}
+  & LLM-based adaptive security
+  & Large language model and XAI integration
+  & Adaptability to evolving threat conditions
+  & High resource requirements for deployment \\
+Harbi et al.~\cite{Harbi2023BlockchainIoDSecurity}
+  & Blockchain trust for drone IoT
+  & Blockchain and distributed trust aggregation
+  & Security in drone communication networks
+  & No energy-aware routing mechanism \\
+Dinde et al.~\cite{R10_Dinde2024BlockchainIoTIntegration}
+  & Blockchain-IoT integration framework
+  & Distributed ledger and consensus protocols
+  & Security challenges in heterogeneous IoT
+  & Scalability degrades in large networks \\
+Alzoubi~\cite{R18_Alzoubi2024BlockchainIoT}
+  & Blockchain privacy for IoT
+  & Blockchain and smart contract mechanisms
+  & Security and data privacy in IoT systems
+  & High transaction latency overhead \\
+Madhavan et al.~\cite{Madhavan2025DesigningSecureIoT}
+  & Fuzzy logic cryptographic IoT design
+  & Fuzzy logic and next generation cryptography
+  & Secure IoT system design for engineering
+  & Limited to cryptographic security scope \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:litsurvey} Provides examples of recent literature,
+facilitating the structured comparative analysis in terms of the
+methodology used, the challenges addressed by the approach, and its
+limitations. The comparative analysis highlights the fact that no existing
+literature tackles the three aspects of heterogeneity, energy efficiency, and security
+at once.
+
+\subsection{Research Gaps}
+\label{subsec:gaps}
+
+In reviewing the literature on WSN-IoT routing, key gaps are identified which existing research does not adequately address.
+The focus of many routing algorithms is mainly on improving one aspect of performance such as power efficiency, reliability of packet delivery, or security measures.
+
+The main drawbacks of the clustering techniques are the cost of reconfiguration
+and the formation of hot spots in the aggregation centers owing to high congestion,
+which limits their lifespan in heterogeneous environments in wide-scale deployment.
+The implementation of ML is faced with some challenges, such as training data and state space explosion.\cite{R16_SharedFcomp2025} While trust-enabled
+While protocols can offer improved security, there is a trade-off for
+increased computational resources that cannot be supported by low-power WSNs
+that employ energy harvesting technology. No approach has been proposed to
+employ adaptive multi-criteria decision-making, predictive analytics, and
+behavioral trust management in a constrained and distributed environment.
+
+\subsection{Motivation}
+\label{subsec:motivation}
+
+Reasons for designing the adaptive decision support system
+for heterogeneous WSN-IoT routing are derived from practical experience
+with poor performance in real-world implementation of single-metric
+routing, which is unsuitable for solving multiple constraint problems.
+\cite{Laroui2021EdgeFogIoT,R19_Falch2025TechnoEconomicsIoTOT}
+Measurement results show that a network implementing traditional routing
+can reduce its effective life expectancy by 40 to 60 percent because of
+asymmetrical energy consumption and early hot spot emergence in
+heterogeneous networks near highly connected relay nodes.
+
+The recent progress in multicriteria decision-making methods and edge
+machine learning offers technical capabilities for intelligent routing,
+which was not possible before due to limitations in hardware resources.
+\cite{R9_Tumula2025OptimizingIoTSDNBlockchain} Thus, there is a unique
+opportunity for introducing adaptive systems capable of supporting
+real-world production deployments of WSN-IoT in various applications,
+such as industrial monitoring, healthcare systems, and smart city
+sensor networks.
+
+\subsection{Problem Statement}
+\label{subsec:problem}
+
+The focus of this research is on the core issue of inefficient routing performance in heterogeneous WSN-IoT architectures because of the lack of an adaptable solution that optimizes all four dimensions of energy consumption, packet loss probability, end-to-end delay, and network security at the same time.
+\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,R21_Pessoa2024RITAResilientIoT} Available solutions use a fixed threshold or a single parameter-based approach that cannot adapt to temporal changes in node energy, link quality, traffic characteristics, and new threats.
+
+A model will be developed that offers an effective decision support system to ensure intelligent and adaptive context-aware routing while maintaining scalability and implementation practicality for large scale WSN-IoT networks. In this case, the model will be capable of realizing energy efficiency, reliability, low latency and security concurrently relying on local information only such that intelligent routing decisions are made without any form of centralized control and global knowledge about network topology.
+
+%%============================================================
+%% SECTION 4: PROPOSED WORK
+%%============================================================
+\section{Proposed Work}
+\label{sec:proposed}
+
+\subsection{Overview of the Proposed Framework}
+\label{subsec:overview}
+
+The design of the proposed Adaptive Decision Support System for
+WSN-IoT routing considers the coordination of three intricately interlinked
+phases that control metric extraction, multi-criteria evaluation, and trust-based
+forwarding prediction during each routing iteration.\cite{Madhavan2025DesigningSecureIoT,R8_Mahanipour2024FeatureEngineeringIDS}
+The first phase, described in section~\ref{subsec:phase1},
+undertakes distributed network state evaluation by collecting and standardizing five key routing metrics from immediate neighboring nodes and building a local decision matrix for each forwarding candidate node.
+
+The second phase, explained in Section~\ref{subsec:phase2}, uses a weighted Topsis scoring algorithm with dynamic adaptation of
+weights based on the Analytic Hierarchy Process to select the best forwarder and an alternate one.
+
+In Phase~3, detailed in Section~\ref{subsec:phase3}, lightweight Long Short-Term Memory prediction model is utilized at cluster head nodes, which predict link failure and energy depletion prior to reaching the threshold value, and perform preventive route updating for maintaining continuity of quality of service.
+The behavioral trust framework, as part of Phase~3, continuously evaluates the fidelity of forwarding process, maintains reputation values using an exponentially weighted average approach, and discards nodes with less than minimum trust value for participation in forwarding.
+
+The three phases function together within a set routing period,
+ensuring that freshness of metrics, accuracy of scoring, and trust
+currency do not exceed their respective resource budgets in terms
+of time and space constraints on sensor devices. Figure~\ref{fig:overview} depicts the architecture of the framework being
+proposed, with the interactions among the three phases, WSN node
+levels, and gateway for connecting the WSN sensors to the IoT cloud
+infrastructure.\cite{Laroui2021EdgeFogIoT,R9_Tumula2025OptimizingIoTSDNBlockchain}
+The flow of data from sensor nodes goes up to the edge cluster
+level then to the IoT gateway, whereas routing decisions travel
+downwards from the decision support engine to each forwarding table.
+The blockchain-assisted trust log, managed at cluster heads, maintains
+a tamper-proof record of all behavioral observations and decisions
+made by the system.
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{figures/figure1.png}
+\caption{High-level architecture of the proposed Adaptive Decision
+Support System showing three-phase coordination, cluster head
+blockchain logging, and IoT gateway connectivity.}
+\label{fig:overview}
+\end{figure*}
+
+\subsection{System Model}
+\label{subsec:sysmodel}
+
+The network is represented using an undirected weighted graph
+$\mathcal{G} = \{\mathcal{V}, \mathcal{E}\}$, where $\mathcal{V}$
+represents the collection of $N$ sensors, while $\mathcal{E}$
+represents the communication edges between any pair of nodes such
+that the Euclidean distance between them does not exceed the
+nominal communication range of $R_{tx}$.\cite{HaddadPajouh2019SurveyIoTSecurity,Laroui2021EdgeFogIoT}
+A hardware class $c_i \in \{1, 2, \ldots, C_{max}\}$ represents
+the processing capacity, memory footprint, and energy reserves of
+each node $v_i \in \mathcal{V}$. Only a single node called the sink
+$v_0 \in \mathcal{V}$ collects data from all other nodes and keeps
+an uninterrupted link to the IoT gateway and cloud processing
+backend.
+
+The energy consumption model is based on the first-order radio
+model in which sending $k$ bits through a distance $d$ consumes the
+energy given by Equation~\ref{eq:etx_model}.
+
+\begin{equation}
+\label{eq:etx_model}
+E_{tx}(k, d) = k \cdot e_{elec} + k \cdot \varepsilon_{amp} \cdot d^{2}
+\end{equation}
+
+\begin{equation}
+\label{eq:erx_model}
+E_{rx}(k) = k \cdot e_{elec}
+\end{equation}
+
+In Equations~\ref{eq:etx_model} and ~\ref{eq:erx_model}, 
+the symbol $e_{elec}$ represents the energy consumed in transceiver electronics per bit
+and $\varepsilon_{amp}$ the energy coefficient of amplifiers which scales with the square of the distance $d$. Network lifetime, $\mathcal{L}$, refers to the duration of simulation until the first node in $\mathcal{V}$ runs out of energy and cannot be included in the forwarding path any longer. QoS performance will be assessed based on packet delivery ratio, average end-to-end delay, and energy cost of delivering packets, compared to the benchmark methods presented in Section~\ref{subsec:simsetup}.
+
+%%------------------------------------------------------------
+\subsection{Phase 1: Network State Assessment and Metric Computation}
+\label{subsec:phase1}
+%%------------------------------------------------------------
+
+The assessment of the network condition is a necessary component of the suggested
+decision model, since it encompasses the quantitative evaluation
+and normalization of parameters that are vital for deciding on
+the suitability of each candidate node for use as a relay.
+Each node sends a hello packet every routing interval $\tau$
+carrying its remaining energy level, queue length, radio strength,
+and hardware type identifier. These values are combined by the
+receiving nodes from all nearby nodes into a local decision matrix of dimensions $N_{nb}
+\times M$ where $N_{nb}$ is the number of neighbors and $M=5$ is the
+number of metrics required for multicriteria decision-making, as
+described in Section~\ref{subsec:phase2}.
+
+The formula used to calculate the residual energy ratio $E_r$ of node $i$ is presented in Equation~\ref{eq:residual_energy}. Here, $E_{current}$ refers to the current battery energy reading, while $E_{initial}$ represents the initial energy allocation when the network was initialized.
+
+\begin{equation}
+\label{eq:residual_energy}
+E_r(i) = \frac{E_{current}(i)}{E_{initial}(i)}
+\end{equation}
+
+The expected number of transmission between the source node $s$
+and the candidate node $j$ is defined as the expected number of
+transmissions needed to transmit one packet, calculated using the
+ratio of received packets, as given in Equation~\ref{eq:etx}.
+
+\begin{equation}
+\label{eq:etx}
+ETX(s, j) = \frac{1}{PRR(s, j)}
+\end{equation}
+
+The normalized received signal strength relates the unnormalized received
+signal strength to the unit interval based on the minimum and maximum
+values found in the neighborhood according to Equation~\ref{eq:rssi_norm}.
+
+\begin{equation}
+\label{eq:rssi_norm}
+\widehat{RSSI}(s, j) =
+\frac{RSSI(s,j) - RSSI_{min}}{RSSI_{max} - RSSI_{min}}
+\end{equation}
+The packet loss ratio is calculated based on the packet reception
+ratio, which is given by Equation~\ref{eq:plr}, giving a loss-based
+view of link quality alongside the throughput-based expected
+transmission count approach.
+
+\begin{equation}
+\label{eq:plr}
+PLR(s, j) = 1 - PRR(s, j)
+\end{equation}
+
+The composite link quality indicator $L_q$ aggregates the three
+link characteristics into a single reliability score as expressed
+in Equation~\ref{eq:link_quality}, where the coefficients
+$\alpha_1$, $\alpha_2$, and $\alpha_3$ are application-configurable
+weights satisfying $\alpha_1 + \alpha_2 + \alpha_3 = 1$.
+
+\begin{equation}
+\label{eq:link_quality}
+L_q(s, j) = \alpha_1 \cdot \frac{1}{ETX(s,j)}
+           + \alpha_2 \cdot \widehat{RSSI}(s,j)
+           + \alpha_3 \cdot \bigl(1 - PLR(s,j)\bigr)
+\end{equation}
+
+The node heterogeneity class metric $H_c$ normalizes the hardware
+capability tier of candidate node $j$ relative to the maximum
+capability tier present in the deployment, as shown in
+Equation~\ref{eq:hc}.
+
+\begin{equation}
+\label{eq:hc}
+H_c(j) = \frac{c_j}{C_{max}}
+\end{equation}
+
+The queue occupancy ratio $Q_r$ for node $j$ is computed as the
+fraction of total buffer capacity currently occupied by queued
+packets, as expressed in Equation~\ref{eq:qr}.
+
+\begin{equation}
+\label{eq:qr}
+Q_r(j) = \frac{q_{occupied}(j)}{q_{total}(j)}
+\end{equation}
+
+The security risk score $S_r$ for node $j$ is derived from the
+composite trust score $T(j)$ computed in
+Section~\ref{subsec:phase3}, mapping trust values to a complementary
+risk scale as shown in Equation~\ref{eq:sr}.
+
+\begin{equation}
+\label{eq:sr}
+S_r(j) = 1 - T(j)
+\end{equation}
+
+Each of the five features is individually scaled to the unit range
+via min-max normalization based on the current neighbor set. Given a feature value x with a minimum of $x_{min}$ and a maximum of $x_{max}$ in the neighborhood, the normalized feature value $\tilde{x}$ is given by Equation~\ref{eq:minmax}.
+
+\begin{equation}
+\label{eq:minmax}
+\tilde{x} = \frac{x - x_{min}}{x_{max} - x_{min}}
+\end{equation}
+
+The resulting local decision matrix $\mathbf{D}$ of dimension
+$N_{nb} \times M$ is defined in Equation~\ref{eq:decision_matrix},
+where each row corresponds to one candidate forwarding node and each
+column corresponds to one normalized routing metric.
+
+\begin{equation}
+\label{eq:decision_matrix}
+\mathbf{D} =
+\begin{bmatrix}
+\tilde{E}_r(1) & \tilde{L}_q(1) & \tilde{Q}_r(1)
+  & \tilde{H}_c(1) & \tilde{S}_r(1) \\
+\tilde{E}_r(2) & \tilde{L}_q(2) & \tilde{Q}_r(2)
+  & \tilde{H}_c(2) & \tilde{S}_r(2) \\
+\vdots & \vdots & \vdots & \vdots & \vdots \\
+\tilde{E}_r(N_{nb}) & \tilde{L}_q(N_{nb}) & \tilde{Q}_r(N_{nb})
+  & \tilde{H}_c(N_{nb}) & \tilde{S}_r(N_{nb})
+\end{bmatrix}
+\end{equation}
+
+The decision matrix $\mathbf{D}$ defined in
+Equation~\ref{eq:decision_matrix} is passed directly to the
+multicriteria scoring engine of Phase~2. Table~\ref{tab:metric_summary}
+summarizes all five primary routing metrics, their measurement sources,
+and normalization ranges used in the proposed framework.
+
+\begin{table}[htbp]
+\centering
+\caption{Primary Routing Metrics Used in Network State Assessment}
+\label{tab:metric_summary}
+\begin{tabular}{p{2.3cm} p{2.5cm} p{1.3cm} p{1.3cm}}
+\toprule
+\textbf{Metric} & \textbf{Source} &
+\textbf{Symbol} & \textbf{Range} \\
+\midrule
+Residual Energy    & Node battery sensor  & $E_r$ & 0 to 1 \\
+Link Quality       & Beacon observations  & $L_q$ & 0 to 1 \\
+Queue Occupancy    & MAC layer buffer     & $Q_r$ & 0 to 1 \\
+Heterogeneity Class& Hardware profile     & $H_c$ & 0 to 1 \\
+Security Risk      & Trust reputation     & $S_r$ & 0 to 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Algorithm~\ref{alg:phase1} details the complete metric collection,
+computation, and normalization procedure executed at every sensor
+node during each routing interval.
+
+\begin{algorithm}[htbp]
+\small
+\caption{Phase 1: Distributed Metric Collection and Normalization}
+\label{alg:phase1}
+\begin{algorithmic}[1]
+\REQUIRE Current node state $v_i$, routing interval $\tau$,
+         link weights $\alpha_1, \alpha_2, \alpha_3$
+\ENSURE Normalized decision matrix $\mathbf{D}$,
+        neighbor set $\mathcal{N}(i)$
+\STATE Broadcast hello message containing
+       $\{E_{current}(i),\; q_{occ}(i),\; c_i,\; T(i)\}$
+\STATE Initialize $\mathcal{N}(i) \leftarrow \emptyset$
+\STATE Initialize raw metric table $\mathbf{R} \leftarrow \emptyset$
+\FORALL{received hello message from node $j$}
+  \STATE Add $j$ to $\mathcal{N}(i)$
+  \STATE Compute $E_r(j)$ using Equation~\ref{eq:residual_energy}
+  \STATE Measure $PRR(i,j)$ from beacon reception history
+  \STATE Compute $ETX(i,j)$ using Equation~\ref{eq:etx}
+  \STATE Measure $RSSI(i,j)$ from received signal level
+  \STATE Compute $\widehat{RSSI}(i,j)$ using
+         Equation~\ref{eq:rssi_norm}
+  \STATE Compute $PLR(i,j)$ using Equation~\ref{eq:plr}
+  \STATE Compute $L_q(i,j)$ using Equation~\ref{eq:link_quality}
+         with $\alpha_1=0.4$, $\alpha_2=0.3$, $\alpha_3=0.3$
+  \STATE Compute $H_c(j)$ using Equation~\ref{eq:hc}
+  \STATE Compute $Q_r(j)$ using Equation~\ref{eq:qr}
+  \STATE Retrieve $T(j)$ from local trust table
+  \STATE Compute $S_r(j)$ using Equation~\ref{eq:sr}
+  \STATE Append row $[E_r(j),\;L_q(j),\;Q_r(j),\;H_c(j),\;S_r(j)]$
+         to $\mathbf{R}$
+\ENDFOR
+\IF{$|\mathcal{N}(i)| = 0$}
+  \STATE Report isolated node condition to cluster head
+  \RETURN $\emptyset$, $\emptyset$
+\ENDIF
+\FORALL{metric column $m \in \{1,\ldots,5\}$}
+  \STATE Extract column vector $\mathbf{R}[:,m]$
+  \STATE Compute $x_{min} \leftarrow \min(\mathbf{R}[:,m])$
+  \STATE Compute $x_{max} \leftarrow \max(\mathbf{R}[:,m])$
+  \IF{$x_{max} - x_{min} > 0$}
+    \STATE Normalize each entry using Equation~\ref{eq:minmax}
+  \ELSE
+    \STATE Set normalized column to all-ones vector
+  \ENDIF
+\ENDFOR
+\STATE Assemble $\mathbf{D}$ as defined in
+       Equation~\ref{eq:decision_matrix}
+\RETURN $\mathbf{D}$, $\mathcal{N}(i)$
+\end{algorithmic}
+\end{algorithm}
+
+%%------------------------------------------------------------
+\subsection{Phase 2: Multicriteria Scoring and Adaptive Weight
+Optimization}
+\label{subsec:phase2}
+%%------------------------------------------------------------
+
+The multi-criteria evaluation algorithm in Phase~2 evaluates the normalized
+matrix of decision $\mathbf{D}$ generated in Phase~1, converting it to a
+scalar utility rating for each forwarding node candidate such that
+the next hop selection can be performed unequivocally.\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,HaddadPajouh2019SurveyIoTSecurity}
+The evaluation function is based on the Technique for Order of
+Preference by Similarity to Ideal Solution approach with an
+Analytic Hierarchy Process-based weight vector initialization which is
+updated dynamically using routing experience within a window $W$ of
+routing cycles. The weight vector $\mathbf{w} = [w_1, w_2, w_3,
+w_4, w_5]^T$ is subjected to simplex constraint in Equation
+\ref{eq:weight_constraint}.
+
+\begin{equation}
+\label{eq:weight_constraint}
+\sum_{k=1}^{5} w_k = 1, \qquad w_k \geq 0
+\quad \forall \; k \in \{1,\ldots,5\}
+\end{equation}
+
+Weights are initialized using the Analytic Hierarchy Process pairwise
+comparison matrix $\mathbf{A}$ whose entry $a_{mn}$ encodes the
+relative importance of metric $m$ over metric $n$ according to the
+Saaty scale, as defined in Equation~\ref{eq:ahp_entry}.
+
+\begin{equation}
+\label{eq:ahp_entry}
+a_{mn} = \frac{w_m}{w_n}, \quad m,n \in \{1,\ldots,5\}
+\end{equation}
+
+The Analytic Hierarchy Process weight for metric $k$ is computed by
+normalizing the geometric mean of row $k$ of $\mathbf{A}$, as
+expressed in Equation~\ref{eq:ahp_weight}.
+
+\begin{equation}
+\label{eq:ahp_weight}
+w_k = \frac{\left(\prod_{n=1}^{5} a_{kn}\right)^{1/5}}
+           {\displaystyle\sum_{m=1}^{5}
+           \left(\prod_{n=1}^{5} a_{mn}\right)^{1/5}}
+\end{equation}
+
+The consistency ratio of the pairwise comparison matrix is verified
+using Equation~\ref{eq:consistency_ratio}, where $\lambda_{max}$ is
+the principal eigenvalue of $\mathbf{A}$, $M$ is the number of
+criteria, and $RI$ is the random index for the corresponding matrix
+dimension.
+
+\begin{equation}
+\label{eq:consistency_ratio}
+CR = \frac{\lambda_{max} - M}{(M - 1) \cdot RI}
+\end{equation}
+
+The Technique for Order Preference by Similarity to Ideal Solution
+positive ideal solution $A_k^{+}$ and negative ideal solution
+$A_k^{-}$ are computed column-wise from the weighted normalized
+decision matrix, as expressed in Equation~\ref{eq:topsis_ideal}.
+
+\begin{equation}
+\label{eq:topsis_ideal}
+A_k^{+} = \max_{j \in \mathcal{N}} D_{jk},
+\qquad
+A_k^{-} = \min_{j \in \mathcal{N}} D_{jk}
+\end{equation}
+
+The weighted Euclidean separations of candidate $j$ from the positive
+ideal solution $d_j^{+}$ and from the negative ideal solution
+$d_j^{-}$ are computed as shown in Equation~\ref{eq:topsis_dist}.
+
+\begin{equation}
+\label{eq:topsis_dist}
+d_j^{+} = \sqrt{\sum_{k=1}^{5} w_k \left(D_{jk} - A_k^{+}\right)^2},
+\qquad
+d_j^{-} = \sqrt{\sum_{k=1}^{5} w_k \left(D_{jk} - A_k^{-}\right)^2}
+\end{equation}
+
+The relative closeness coefficient $C_j$ of candidate $j$ to the
+ideal solution is computed as expressed in
+Equation~\ref{eq:relative_closeness}, with values closer to unity
+indicating superior forwarding suitability.
+
+\begin{equation}
+\label{eq:relative_closeness}
+C_j = \frac{d_j^{-}}{d_j^{+} + d_j^{-}}
+\end{equation}
+
+Online weight adaptation adjusts the weight vector based on the
+gradient of observed routing performance, following the update rule
+expressed in Equation~\ref{eq:weight_update}, where $\eta$ denotes
+the learning rate and $\delta_k^{(t)}$ denotes the performance
+gradient for metric $k$ at cycle $t$.
+
+\begin{equation}
+\label{eq:weight_update}
+w_k^{(t+1)} = w_k^{(t)} + \eta \cdot \delta_k^{(t)},
+\quad \forall \; k \in \{1,\ldots,5\}
+\end{equation}
+
+Following each update step, the weight vector is projected back onto
+the probability simplex defined by Equation~\ref{eq:weight_constraint}
+through the normalization shown in Equation~\ref{eq:weight_normalize}.
+
+\begin{equation}
+\label{eq:weight_normalize}
+w_k \leftarrow \frac{\max(w_k,\, 0)}
+{\displaystyle\sum_{m=1}^{5} \max(w_m,\, 0)},
+\quad \forall \; k
+\end{equation}
+
+The performance gradient $\delta_k^{(t)}$ is estimated from the
+empirical correlation between metric $k$ and the observed packet
+delivery ratio improvement over the sliding window of $W$ routing
+cycles, as expressed in Equation~\ref{eq:gradient}.
+
+\begin{equation}
+\label{eq:gradient}
+\delta_k^{(t)} = \frac{1}{W}
+\sum_{\tau=t-W+1}^{t}
+\Bigl(PDR^{(\tau)} - \overline{PDR}\Bigr)
+\cdot \Bigl(D_{j^*,k}^{(\tau)} - \bar{D}_k\Bigr)
+\end{equation}
+
+In Equation~\ref{eq:gradient}, $j^{*}$ denotes the selected forwarder
+at cycle $\tau$, $PDR^{(\tau)}$ denotes the observed delivery ratio
+for that cycle, and $\overline{PDR}$ and $\bar{D}_k$ denote window
+averages of delivery ratio and metric $k$ respectively.
+
+Figure~\ref{fig:topsis_flow} illustrates the internal flow of the
+Technique for Order Preference by Similarity to Ideal Solution scoring
+engine, from weight initialization through candidate ranking to
+forwarder selection.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{figures/figure2.png}
+\captionof{figure}{Internal flow of the TOPSIS scoring engine in Phase~2,
+showing the progression from Analytic Hierarchy Process initialization
+through candidate ranking to online weight update.}
+\label{fig:topsis_flow}
+\end{minipage}
+\vspace{4pt}
+
+
+Algorithm~\ref{alg:phase2} presents the complete multicriteria scoring
+and adaptive weight optimization procedure.
+
+\begin{algorithm}[htbp]
+\small
+\caption{Phase 2: TOPSIS Multicriteria Scoring and Online Weight
+Adaptation}
+\label{alg:phase2}
+\begin{algorithmic}[1]
+\REQUIRE Decision matrix $\mathbf{D}$, weight vector $\mathbf{w}$,
+         window $W$, rate $\eta$,
+         threshold $E_{th}$, trust threshold $T_{min}$
+\ENSURE Primary forwarder $j^{*}$, backup forwarder $j^{**}$,
+        updated weight vector $\mathbf{w}$
+\STATE Retrieve current weight vector $\mathbf{w}^{(t)}$
+\STATE Verify consistency ratio using Equation~\ref{eq:consistency_ratio}
+\IF{$CR > 0.1$}
+  \STATE Revise pairwise comparison matrix $\mathbf{A}$
+\ENDIF
+\STATE Compute $A_k^{+}$ and $A_k^{-}$ for all $k$ using
+       Equation~\ref{eq:topsis_ideal}
+\FORALL{candidate node $j \in \mathcal{N}(i)$}
+  \STATE Compute $d_j^{+}$ using Equation~\ref{eq:topsis_dist}
+  \STATE Compute $d_j^{-}$ using Equation~\ref{eq:topsis_dist}
+  \STATE Compute $C_j$ using Equation~\ref{eq:relative_closeness}
+\ENDFOR
+\STATE Sort candidates by $C_j$ in descending order
+\STATE Initialize $j^{*} \leftarrow \text{null}$,
+       $j^{**} \leftarrow \text{null}$, rank $\leftarrow 1$
+\FORALL{candidate $j$ in sorted order}
+  \IF{$E_r(j) \geq E_{th}$ \AND $T(j) \geq T_{min}$}
+    \IF{rank $= 1$}
+      \STATE Set $j^{*} \leftarrow j$
+      \STATE Increment rank to 2
+    \ELSIF{rank $= 2$}
+      \STATE Set $j^{**} \leftarrow j$
+      \STATE Break loop
+    \ENDIF
+  \ENDIF
+\ENDFOR
+\IF{$j^{*} = \text{null}$}
+  \STATE Trigger route rediscovery and notify sink
+  \RETURN null, null, $\mathbf{w}^{(t)}$
+\ENDIF
+\STATE Observe $PDR^{(t)}$ for current routing cycle
+\STATE Append $PDR^{(t)}$ and $\mathbf{D}_{j^*}^{(t)}$ to history
+\IF{history length $\geq W$}
+  \FORALL{metric $k \in \{1,\ldots,5\}$}
+    \STATE Compute $\delta_k^{(t)}$ using Equation~\ref{eq:gradient}
+    \STATE Update $w_k^{(t+1)}$ using Equation~\ref{eq:weight_update}
+  \ENDFOR
+  \STATE Project $\mathbf{w}^{(t+1)}$ using
+         Equation~\ref{eq:weight_normalize}
+\ENDIF
+\RETURN $j^{*}$, $j^{**}$, $\mathbf{w}^{(t+1)}$
+\end{algorithmic}
+\end{algorithm}
+
+%%------------------------------------------------------------
+\subsection{Phase 3: Predictive Routing and Trust-Aware Forwarding}
+\label{subsec:phase3}
+%%------------------------------------------------------------
+
+Proactive route update makes the new model different from
+reactive approaches since it identifies when performance will be
+compromised before any thresholds are violated and updates the
+route proactively to ensure QoS continuity.
+\cite{R7_Baral2024AdaptiveEndToEndIoT,R8_Mahanipour2024FeatureEngineeringIDS}
+A compact Long Short-Term Memory model residing only on cluster heads takes in a stream of residual energy and link
+quality measurements obtained during a sliding window of $W$ routing cycles and generates forecasts of their next value for
+each neighboring node. The LSTM model is chosen because it can
+identify long-term dependencies between values in sensor network
+behavior streams while being small enough not to overflow cluster
+head memory.
+
+The equation \ref{eq:lstm_forget} shows the calculation of the
+forget gate $\mathbf{f}_t$ of the Long Short-Term Memory
+that decides what information from the previous state cell $\mathbf{c}_{t-1}$ will be kept.
+
+\begin{equation}
+\label{eq:lstm_forget}
+\mathbf{f}_t = \sigma\!\left(
+\mathbf{W}_f \left[\mathbf{h}_{t-1},\, \mathbf{x}_t\right]
++ \mathbf{b}_f \right)
+\end{equation}
+
+The input gate $\mathbf{i}_t$ and candidate cell vector
+$\mathbf{g}_t$ jointly determine which new information to write into
+the cell state, as expressed in Equation~\ref{eq:lstm_input} and
+Equation~\ref{eq:lstm_cell_cand} respectively.
+
+\begin{equation}
+\label{eq:lstm_input}
+\mathbf{i}_t = \sigma\!\left(
+\mathbf{W}_i \left[\mathbf{h}_{t-1},\, \mathbf{x}_t\right]
++ \mathbf{b}_i \right)
+\end{equation}
+
+\begin{equation}
+\label{eq:lstm_cell_cand}
+\mathbf{g}_t = \tanh\!\left(
+\mathbf{W}_g \left[\mathbf{h}_{t-1},\, \mathbf{x}_t\right]
++ \mathbf{b}_g \right)
+\end{equation}
+
+The updated cell state $\mathbf{c}_t$ and output gate $\mathbf{o}_t$
+are computed as expressed in Equation~\ref{eq:lstm_cell} and
+Equation~\ref{eq:lstm_output} respectively.
+
+\begin{equation}
+\label{eq:lstm_cell}
+\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1}
+             + \mathbf{i}_t \odot \mathbf{g}_t
+\end{equation}
+
+\begin{equation}
+\label{eq:lstm_output}
+\mathbf{o}_t = \sigma\!\left(
+\mathbf{W}_o \left[\mathbf{h}_{t-1},\, \mathbf{x}_t\right]
++ \mathbf{b}_o \right)
+\end{equation}
+
+The hidden state $\mathbf{h}_t$ passed to the next time step is
+computed as shown in Equation~\ref{eq:lstm_hidden}.
+
+\begin{equation}
+\label{eq:lstm_hidden}
+\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{c}_t)
+\end{equation}
+
+The one-step-ahead energy forecast for node $i$ at future cycle
+$t+1$ is produced by applying the trained Long Short-Term Memory
+model to the historical residual energy sequence as expressed in
+Equation~\ref{eq:energy_forecast}.
+
+\begin{equation}
+\label{eq:energy_forecast}
+\hat{E}_r(i, t+1) = f_\theta\!\left(
+E_r(i,t),\; E_r(i,t-1),\; \ldots,\; E_r(i,t-W+1)\right)
+\end{equation}
+
+A proactive route switch is triggered when the forecast energy of
+the active next-hop forwarder falls below the safety threshold
+$E_{th}^{pro}$ defined in Equation~\ref{eq:proactive_threshold},
+where $\Delta_E$ is the calibrated safety margin that prevents
+premature route changes while ensuring sufficient lead time for
+successful handover.
+
+\begin{equation}
+\label{eq:proactive_threshold}
+E_{th}^{pro} = E_{th} + \Delta_E
+\end{equation}
+
+The direct behavioral trust score $T_d$ for neighboring node $j$
+is updated at each routing cycle using an exponential weighted moving
+average of binary forwarding observations $o^{(t)}$, as expressed in
+Equation~\ref{eq:trust_update}.
+
+\begin{equation}
+\label{eq:trust_update}
+T_d^{(t+1)}(j) = \gamma \cdot T_d^{(t)}(j)
+               + (1 - \gamma) \cdot o^{(t)}(j)
+\end{equation}
+
+The composite trust score $T(j)$ merges direct observation trust
+$T_d$ with aggregated indirect reputation $T_{ind}$ received from
+trusted second-hand witnesses, as expressed in
+Equation~\ref{eq:trust_composite}.
+
+\begin{equation}
+\label{eq:trust_composite}
+T(j) = \beta \cdot T_d(j) + (1 - \beta) \cdot T_{ind}(j),
+\quad \beta \in [0,1]
+\end{equation}
+
+The final routing score $R(j)$ that combines Technique for Order
+Preference by Similarity to Ideal Solution utility with trust
+confidence is computed as expressed in
+Equation~\ref{eq:final_score}, providing a single consolidated
+metric for definitive next-hop selection under adversarial conditions.
+
+\begin{equation}
+\label{eq:final_score}
+R(j) = C_j \cdot T(j)
+\end{equation}
+
+Nodes for which $T(j) < T_{min}$ are blacklisted and excluded from
+consideration regardless of their closeness score $C_j$, while the
+remaining candidates are ranked by $R(j)$ as defined in
+Equation~\ref{eq:final_score}. Table~\ref{tab:phase_summary}
+summarizes the three phases of the proposed framework, their
+computational complexity, and the WSN layer at which each phase
+executes.
+
+\begin{table*}[htbp]
+\centering
+\caption{Summary of Adaptive Decision Support Framework Phases}
+\label{tab:phase_summary}
+\begin{tabular}{p{3.0cm} p{4.4cm} p{2.8cm} p{3.0cm}}
+\toprule
+\textbf{Phase} & \textbf{Function} &
+\textbf{Complexity} & \textbf{Execution Layer} \\
+\midrule
+Phase 1 Assessment
+  & Metric collection and normalization
+  & $O(N_{\text{nb}})$
+  & All sensor nodes \\
+Phase 2 Scoring
+  & TOPSIS utility ranking and weight update
+  & $O(N_{\text{nb}} \cdot M)$
+  & All sensor nodes \\
+Phase 3 Prediction and Trust
+  & LSTM forecast and behavioral isolation
+  & $O(W \cdot H)$
+  & Cluster head nodes \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+In Table~\ref{tab:phase_summary}, $N_{\text{nb}}$ denotes the one-hop
+neighbor count, $M$ denotes the number of routing metrics, $W$ denotes
+the prediction window length, and $H$ denotes the hidden state
+dimension of the Long Short-Term Memory model. The overall framework
+complexity remains linear in the number of neighbors for Phases~1
+and~2, ensuring deployability on resource-constrained sensor nodes
+without exceeding available processing
+budgets.\cite{R3_Narkedimilli2025AdaptiveCurriculumIoT,Madhavan2025DesigningSecureIoT}
+
+Algorithm~\ref{alg:phase3} presents the complete predictive routing
+and trust-aware forwarding procedure executed at cluster head nodes
+during each routing interval.
+
+\begin{algorithm}[htbp]
+\small
+\caption{Phase 3: LSTM Prediction and Trust-Aware Forwarding}
+\label{alg:phase3}
+\begin{algorithmic}[1]
+\REQUIRE LSTM model $f_\theta$, trust table $\mathbf{T}$,
+         buffer $\mathcal{H}$, window $W$,
+         thresholds $E_{th}^{pro}$, $T_{min}$,
+         factor $\gamma$, blend $\beta$
+\ENSURE Updated trust table $\mathbf{T}$, proactive route flag
+\FORALL{neighbor $j \in \mathcal{N}(i)$}
+  \STATE Retrieve energy history
+         $\{E_r(j,t-W+1),\ldots,E_r(j,t)\}$ from $\mathcal{H}$
+  \IF{history length $< W$}
+    \STATE Skip forecast and use current $E_r(j,t)$ as estimate
+  \ELSE
+    \STATE Compute $\hat{E}_r(j,t+1)$ using
+           Equation~\ref{eq:energy_forecast}
+  \ENDIF
+  \IF{$\hat{E}_r(j,t+1) < E_{th}^{pro}$}
+    \STATE Mark node $j$ as energy-critical
+  \ENDIF
+  \STATE Retrieve behavioral observation $o^{(t)}(j)$
+  \STATE Update $T_d^{(t+1)}(j)$ using
+         Equation~\ref{eq:trust_update}
+  \STATE Retrieve $T_{ind}(j)$ from neighbor reports
+  \STATE Compute $T(j)$ using
+         Equation~\ref{eq:trust_composite}
+  \IF{$T(j) < T_{min}$}
+    \STATE Blacklist node $j$ and remove from candidate set
+    \STATE Broadcast isolation notice to one-hop neighbors
+    \STATE Log blacklist event to blockchain ledger
+  \ENDIF
+  \STATE Compute $S_r(j)$ using Equation~\ref{eq:sr}
+  \STATE Compute $R(j)$ using Equation~\ref{eq:final_score}
+  \STATE Update trust table entry $\mathbf{T}[j] \leftarrow T(j)$
+\ENDFOR
+\STATE Retrieve primary forwarder $j^{*}$ from Phase~2 output
+\IF{$j^{*}$ is energy-critical OR $T(j^{*}) < T_{min}$}
+  \STATE Promote backup forwarder $j^{**}$ to primary
+  \STATE Request Phase~2 to compute new backup candidate
+  \STATE Log proactive handover event to blockchain ledger
+\ENDIF
+\STATE Append current metric snapshot to $\mathcal{H}$
+\IF{length of $\mathcal{H}$ exceeds $2W$}
+  \STATE Discard oldest entries to maintain window size $W$
+\ENDIF
+\RETURN updated $\mathbf{T}$, proactive route flag
+\end{algorithmic}
+\end{algorithm}
+
+%%============================================================
+%% SECTION 5: RESULTS AND EVALUATION
+%%============================================================
+\section{Results and Evaluation}
+\label{sec:results}
+
+\subsection{Simulation Setup}
+\label{subsec:simsetup}
+
+The performance of the Adaptive Decision Support System is determined through
+a simulation performed with the use of the NS-3 discrete-event network
+simulator, where IEEE 802.15.4 MAC and Physical layer implementations are used
+for modelling realistic transmission conditions for the WSN-IoT, namely,
+path losses, interference and duty-cycling.
+\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,Laroui2021EdgeFogIoT}
+Randomly distributed network topologies are created by deploying the sensor
+nodes within a 200 meters x 200 meters simulation environment with one sink
+node located in its center.
+Three different configurations with densities of 50, 100, and 200 nodes
+are considered.
+
+Each node had a heterogeneous energy profile randomly selected from
+the range of 0.5 joules to 2.0 joules to reflect the actual hardware
+variance of WSN-IoT deployments.\cite{HaddadPajouh2019SurveyIoTSecurity,R21_Pessoa2024RITAResilientIoT}
+Traffic was generated via a constant bit rate traffic generation
+scheme that emits packets every second with an average size of 100
+bytes. Each setup was tested for 30 runs with different random seed
+numbers, and results were averaged with a confidence level of 95
+percent.
+
+Table~\ref{tab:sim_params} lists the complete set of simulation
+parameters used across all experimental evaluations.
+
+\begin{table}[htbp]
+\centering
+\caption{Simulation Parameters and Configuration Values}
+\label{tab:sim_params}
+\begin{tabular}{p{4.2cm} p{3.4cm}}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Simulation area             & 200 m by 200 m \\
+Number of nodes             & 50, 100, 200 \\
+Initial energy range        & 0.5 J to 2.0 J \\
+Transmission range          & 30 m \\
+MAC protocol                & IEEE 802.15.4 \\
+Traffic model               & CBR at 2 pkts/s \\
+Packet size                 & 100 bytes \\
+Simulation duration         & 1200 s \\
+Routing interval            & 10 s \\
+Prediction window $W$       & 10 cycles \\
+Trust forgetting $\gamma$   & 0.8 \\
+Minimum trust $T_{min}$     & 0.4 \\
+Energy threshold $E_{th}$   & 0.1 J \\
+Safety margin $\Delta_E$    & 0.05 J \\
+Learning rate $\eta$        & 0.01 \\
+Independent trials          & 30 \\
+LSTM hidden units $H$       & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Baseline performance evaluation involved comparing to five schemes: AODV,
+a reactive single path approach; RPL with objective function zero
+as a proactive optimized approach for the Internet-of-Things; LEACH,
+representative of hierarchical clustering approaches; PSO Routing,
+representative of energy aware bio-inspired schemes; and Trust
+RPL, which integrates security into the routing process using RPL
+combined with a trust filter based on reputation. \cite{R3_Narkedimilli2025AdaptiveCurriculumIoT, Harbi2023BlockchainIoDSecurity}
+The weights vector was set as $[0.2, 0.2, 0.2, 0.2, 0.2]$
+for all simulations with free evolution allowed
+
+\subsection{Evaluation Metrics}
+\label{subsec:evalmetrics}
+
+The performance metrics are represented by four main indicators
+that are associated with the essential characteristics of routing
+quality in WSN-IoT networks.\cite{Tahsien2020MLIoTSecurity,R22_Tiwari2025ChallengesIoTDevices}
+The packet delivery ratio represents the percentage of packets that are
+delivered by the source nodes to the sink node compared to the number of
+total packets created within the network considering the impact of various
+parameters like quality of links, congestion, and routing algorithms.
+
+End-to-end average delay is the amount of time taken from the generation
+of the packet at the source to receiving it by the sink node including
+queuing, transmission, propagation, and forwarding latencies.
+The network lifetime refers to the time period until the first node is no
+longer able to forward any packets due to depleted energy reserves and leaves
+the topology.\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,Madhavan2025DesigningSecureIoT}
+Normalized energy consumption per packet transferred is calculated as
+the energy consumed by the whole network system divided by the total
+packets that have been transmitted successfully. Network throughput is
+defined as the amount of information successfully received at the sink
+per unit time. For adversarial cases, the packet transfer success rate
+under attack evaluates the resistance of trust-based forwarding against
+selective forwarding attackers with 10\% to 25\% malicious nodes.
+
+\subsection{Dataset Processing and Simulation Data Management}
+\label{subsec:dataset}
+
+All simulations were performed using NS-3 trace file outputs, which
+included per-packet transmission information, energy consumption log, and routing tables updates on each node during simulation.
+\cite{R8_Mahanipour2024FeatureEngineeringIDS,R3_Narkedimilli2025AdaptiveCurriculumIoT}
+Trace files were parsed using our customized Python scripts in order to extract the packet transmission information,
+per-interval energy consumption log, and link condition through beaconing. Per-simulation metrics were calculated, and then their averages were obtained for 30 runs
+in order to be used in the analysis presented in the following subsections.
+
+The Long Short-Term Memory (LSTM) model implemented in Phase 3 used energy measurements obtained from the first 200 seconds of each simulation as the warm-up phase of the network.\cite{R7_Baral2024AdaptiveEndToEndIoT} These training data sets were scaled using Equation \ref{eq:minmax} prior to providing them as inputs to the model. Sequences in the next 200 seconds were used to validate the ability of the model to generalize beyond its training. Weights in the trained model were frozen and loaded into simulations in the cluster head node for the last 800 seconds of each simulation.
+
+In order to create the adversarial situation scenario dataset, the selected
+percentage of sensor nodes were classified as selective forwarders, where they
+would discard a specified number of packets prior to taking any interval
+measurement metrics for the routes. \cite{R9_Tumula2025OptimizingIoTSDNBlockchain}
+The observations regarding the trust subsystem metrics, such as direct
+observation scores, indirect reputation scores, and blacklisting events,
+were recorded individually to study the isolation effect of the
+trust-aware forwarding mechanism under different percentages of attacks.
+All the simulation data in raw form are stored in a repository.
+
+\subsection{Packet Delivery Ratio Comparison}
+\label{subsec:pdr_nodes}
+The suggested Adaptive Decision Support System obtains a packet
+delivery ratio of 96.8 percent in the case of 100 nodes as opposed
+to 91.2 percent in Trust-RPL, 89.4 percent in PSO-Routing, 87.1
+percent in RPL, 83.6 percent in AODV, and 79.2 percent in LEACH,
+which indicates a 9.7 percent improvement in comparison with the best baseline.
+Equation \ref{eq:relative_closeness} demonstrates how link quality, queue size,
+and energy levels are taken into account simultaneously using the multicriteria approach.
+All confidence intervals of 30 tests conducted are less than 1.4 percent.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph01_pdr_vs_nodes.png}
+\captionof{figure}{Packet delivery ratio versus number of deployed nodes for
+the proposed ADSS and five baseline protocols.}
+\label{fig:pdr_nodes}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Network Lifetime Comparison}
+\label{subsec:lifetime_nodes}
+
+Lifetime of network using the Adaptive Decision Support System 
+is achieved to be 1120 seconds using 100 nodes, beating PSO-Routing 
+with a lifetime of 972 seconds, Trust-RPL with 935 seconds, RPL with
+918 seconds, AODV with 882 seconds, and LEACH with 812 seconds.
+The energy-based scoring defined in Equation~\ref{eq:relative_closeness}
+ensures that the load of data forwarding is distributed proportionally
+to remaining energy, preventing any hotspot phenomena. Using proactively
+performed handovers based on Long Short-Term Memory thresholding 
+in Equation~\ref{eq:proactive_threshold} adds another 6 percent of 
+network lifetime to this scheme.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph02_lifetime_vs_nodes.png}
+\captionof{figure}{Network lifetime versus number of deployed nodes across
+the proposed ADSS and five baseline protocols.}
+\label{fig:lifetime_nodes}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{End-to-End Delay Comparison}
+\label{subsec:delay_nodes}
+
+The minimum average end-to-end delay for the proposed algorithm
+occurs when there are 100 nodes with a delay of 44.7 ms, while
+Trust-RPL has a delay of 52.3 ms, PSO-Routing with a delay of 50.1
+ms, RPL with 53.1 ms, AODV with 68.9 ms, and LEACH with 81.6 ms.
+Feedback on queue occupancy given by Equation~\ref{eq:qr} helps steer
+the data flow away from congested relay nodes, thereby minimizing
+queuing delays that constitute the majority of end-to-end delay.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph03_delay_vs_nodes.png}
+\captionof{figure}{Average end-to-end delay versus number of deployed nodes
+comparing the proposed ADSS and five baseline protocols.}
+\label{fig:delay_nodes}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Energy Consumption per Packet}
+\label{subsec:energy_nodes}
+
+Energy consumption for every packet successfully delivered in the
+proposed protocol equals 2.8 mJ for 100 nodes; that is,
+improvements of 26\%, 40\%, and 50\% have been attained relative to RPL
+(3.8 mJ), AODV (4.7 mJ), and LEACH (5.6 mJ) protocols,
+respectively.\cite{Madhavan2025DesigningSecureIoT} Multicriteria path
+selection minimizes transmission distances while avoiding relay nodes
+that may be saturated, thus cutting per-hop energy costs and decreasing
+the required number of retransmissions for guaranteed packet delivery.
+PSO-Routing consumes 3.3 mJ per packet and is competitive in terms of
+energy efficiency, albeit with greater computation efforts during route
+selection.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph04_energy_vs_nodes.png}
+\captionof{figure}{Normalized energy consumption per successfully delivered
+packet versus number of deployed nodes for all six protocols.}
+\label{fig:energy_packet}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Packet Delivery Ratio Under Increasing Traffic Load}
+\label{subsec:pdr_traffic}
+
+Analysis on packet delivery ratio for rising traffic rate indicates that
+the proposed scheme sustains a delivery ratio of 88.2 percent with
+traffic rate 5 packets per second, while Trust-RPL gives a ratio of 83.9
+percent, RPL has 79.6 percent, AODV has 75.4 percent, and LEACH
+has 70.3 percent under similar traffic conditions.\cite{Tahsien2020MLIoTSecurity,R22_Tiwari2025ChallengesIoTDevices}
+Queue occupancy feedback according to Equation~\ref{eq:qr} identifies
+congestion in time and routes traffic, thereby sustaining high delivery
+ratios under high load.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph05_pdr_vs_traffic.png}
+\captionof{figure}{Packet delivery ratio versus traffic generation rate at
+100 nodes for all six compared protocols.}
+\label{fig:pdr_traffic}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Network Lifetime Versus Initial Energy Budget}
+\label{subsec:lifetime_energy}
+
+The network lifetime shows a linear scaling behavior with respect to initial energy budget for all the protocols considered, and the proposed scheme attains a value of 1310 seconds for an initial energy budget of 2.0 joules as against 1108 seconds in Trust-RPL and 1080 seconds in RPL.\cite{R21_Pessoa2024RITAResilientIoT} The lifetime-energy slope value is highest for the proposed scheme, implying better energy balancing by energy-based routing towards lifetime maximization.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph06_lifetime_vs_energy.png}
+\captionof{figure}{Network lifetime versus initial node energy budget at
+100 nodes across all six evaluated protocols.}
+\label{fig:lifetime_energy}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Adaptive Weight Evolution}
+\label{subsec:weight_evolution}
+
+It requires about 30 iterations of routing before convergence occurs, where the residual energy weight value changes from 0.20 to 0.38, while the security threat weight value changes from 0.20 to 0.06, because the learning system realizes that the energy allocation factor is the most significant element regarding the life cycle of the nodes of the network.\cite{Madhavan2025DesigningSecureIoT,R8_Mahanipour2024FeatureEngineeringIDS}
+This result confirms that the structure of weights is consistent with Equation~\ref{eq:gradient}.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph07_weight_evolution.png}
+\captionof{figure}{Evolution of adaptive metric weights over routing cycles
+showing convergence of the online Analytic Hierarchy Process weight
+update rule defined in Equation~\ref{eq:weight_update}.}
+\label{fig:weight_evolution}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Network Throughput Comparison}
+\label{subsec:throughput_nodes}
+
+Throughput in the network within the new model stands at 17.6 kbps in
+a scenario of 100 nodes, which is higher than Trust-RPL's 15.8 kbps,
+PSO-Routing's 15.2 kbps, RPL's 14.4 kbps, AODV's 13.1 kbps, and
+LEACH's 11.7 kbps.\cite{R9_Tumula2025OptimizingIoTSDNBlockchain}
+The reason for the 22 percent improvement in throughput relative to
+LEACH is the elimination of cluster reshaping, which disrupts data
+transmission during the process. High delivery rate and minimal delay in
+the suggested system lead to better throughput.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph08_throughput_vs_nodes.png}
+\captionof{figure}{Network throughput versus number of deployed nodes for
+the proposed ADSS and five baseline protocols.}
+\label{fig:throughput_nodes}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Resilience Under Selective Forwarding Attack}
+\label{subsec:pdr_attack}
+
+With selective forwarding attacks, where there are 20 percent malicious nodes,
+the proposed system achieves a packet delivery ratio of 88.7
+percent while Trust-RPL gives 75.6 percent, PSO-Routing 71.2 percent, RPL 63.1
+percent, AODV 54.8 percent, and LEACH 48.1 percent.\cite{Harbi2023BlockchainIoDSecurity,R10_Dinde2024BlockchainIoTIntegration}
+In phase 3, the trust subsystem manages to detect and blacklist the
+malicious nodes through the use of Equation~\ref{eq:trust_update},
+thus preventing them from affecting the delivery performance.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph09_pdr_vs_attack.png}
+\captionof{figure}{Packet delivery ratio versus percentage of malicious nodes
+under selective forwarding attack at 100 nodes for all six protocols.}
+\label{fig:pdr_attack}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Control Packet Overhead Comparison}
+\label{subsec:overhead_nodes}
+
+The control packet overhead in the proposed architecture is 18.6 control packets
+per second with 100 nodes, whereas the overhead in Trust-RPL, PSO-routing,
+RPL, AODV, and LEACH is 24.3, 30.4, 22.8, 38.7, and 26.4, respectively.
+During Phase~1 of the measurement of routing metrics using the
+hello-messages technique, five metrics are measured and combined into one
+broadcast message, hence no extra overhead due to the probes used by other
+methods. The overhead for AODV method is maximum because of its route
+discovery method based on flooding messages in a highly dynamic environment.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph10_overhead_vs_nodes.png}
+\captionof{figure}{Control packet overhead versus number of deployed nodes
+for the proposed ADSS and five baseline protocols.}
+\label{fig:overhead_nodes}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Node Survival Rate}
+\label{subsec:survival_time}
+
+The node survival rate of the proposed technique comes out to be
+72.4 percent, whereas that of PSO-Routing is 60.8 percent, Trust-
+RPL is 57.4 percent, RPL is 53.2 percent, AODV is 44.8 percent,
+and LEACH is 37.6 percent.\cite{R19_Falch2025TechnoEconomicsIoTOT,R9_Tumula2025OptimizingIoTSDNBlockchain}
+The equitable distribution of forwarder load that the proposed
+scheme achieves with the help of residual energy scoring mechanism
+in Eq.~(\ref{eq:residual_energy}) ensures that none of the nodes get
+picked as relay points. This helps retain the complete coverage.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph11_survival_vs_time.png}
+\captionof{figure}{Node survival rate versus simulation time for all six
+evaluated protocols at the 100-node configuration.}
+\label{fig:survival_time}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{End-to-End Delay Under Increasing Traffic Rate}
+\label{subsec:delay_traffic}
+
+Average delay when the traffic load is being increased is such that the system's average delay is always under 63 ms for traffic loads of 5 packets per second while that of AODV is 96.7 ms and that of LEACH is 109.2 ms. \cite{R8_Mahanipour2024FeatureEngineeringIDS,R3_Narkedimilli2025AdaptiveCurriculumIoT} The Queue Occupancy factor defined in equation ~\ref{eq:qr} constantly observes buffer status at potential nodes and moves the traffic to less congested paths before the delay exceeds limits.
+
+
+\vspace{4pt}
+\noindent\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=0.88\columnwidth]{results/graph12_delay_vs_traffic.png}
+\captionof{figure}{Average end-to-end delay versus traffic generation rate
+at 100 nodes for all six evaluated protocols.}
+\label{fig:delay_traffic}
+\end{minipage}
+\vspace{4pt}
+
+
+\subsection{Quantitative Performance Summary}
+\label{subsec:quant_summary}
+
+\begin{table*}[htbp]
+\centering
+\caption{Quantitative Performance Comparison at 100 Nodes}
+\label{tab:quant_results}
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Protocol} & \textbf{PDR (\%)} &
+\textbf{Delay (ms)} & \textbf{Lifetime (s)} &
+\textbf{Energy per Pkt (mJ)} \\
+\midrule
+Proposed ADSS & \textbf{96.8} & \textbf{44.7} &
+                \textbf{1120}  & \textbf{2.8}  \\
+Trust-RPL     & 91.2          & 52.3          & 935  & 3.6 \\
+PSO-Routing   & 89.4          & 50.1          & 972  & 3.3 \\
+RPL           & 87.1          & 53.1          & 918  & 3.8 \\
+AODV          & 83.6          & 68.9          & 882  & 4.7 \\
+LEACH         & 79.2          & 81.6          & 812  & 5.6 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Results for key metrics for the system performance are presented in Table~\ref{tab:quant_results}, where we show that the developed Adaptive Decision Support System obtains the optimal performance in each metric among all four at once.
+\cite{R9_Tumula2025OptimizingIoTSDNBlockchain,Laroui2021EdgeFogIoT}
+Such an optimal performance across several criteria means that it is possible to optimize all metrics without any sacrifices made by one of them at the expense of improving another, unlike what happens in all five baselines, which exhibit single-criterion behavior.
+
+%%============================================================
+%% SECTION 6: CONCLUSION
+%%============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+Adaptive decision support system (DSS) with an integration of heterogeneous routing in WSN-IoT networks, multi-criteria optimization, dynamic weight tuning,
+lightweight long short term memory based forecasting and behavioral trust management into a unified three-stage process is proposed in this paper.
+Application of Technique for Order of Preference by Similarity to Ideal Solution (TOPSIS) scoring engine and adaptive weights initialization via
+Analytic Hierarchy Process allows each sensor node to compute the optimal route based on residual energy, link quality, queue size, node
+heterogeneity and security concerns.
+
+Simulation results have confirmed that the proposed algorithm provides 96.8% packet delivery rate, 1120 seconds of network lifetime, 44.7
+milliseconds of end-to-end delay and 2.8 millijoules per packet energy consumption with 100 nodes, beating all five baseline algorithms in all four
+metrics mentioned. Convergence speed of the adaptive weighting procedure requires only 30 iterations, meanwhile trust management component
+isolates malicious nodes without interfering with legitimate packets.
+
+Further work will involve the application of this framework in the context of mobility-aware WSN-IoT networks and joint model update in partitioned
+networks using federated learning techniques without any sharing of behavioral data between nodes. Computational validity of this framework will be
+verified via Contiki-NG and RIOT OS experimentation.
+
+\FloatBarrier
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+\end{document}
